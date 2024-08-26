@@ -1,21 +1,21 @@
 import { Blockchain, SandboxContract, TreasuryContract } from '@ton/sandbox';
 import { toNano } from '@ton/core';
-import { Jetton } from '../wrappers/Jetton';
+import { SampleJetton } from '../wrappers/SampleJetton';
 import '@ton/test-utils';
 
-describe('Jetton', () => {
+describe('SampleJetton', () => {
     let blockchain: Blockchain;
     let deployer: SandboxContract<TreasuryContract>;
-    let jetton: SandboxContract<Jetton>;
+    let sampleJetton: SandboxContract<SampleJetton>;
 
     beforeEach(async () => {
         blockchain = await Blockchain.create();
 
-        jetton = blockchain.openContract(await Jetton.fromInit());
+        sampleJetton = blockchain.openContract(await SampleJetton.fromInit());
 
         deployer = await blockchain.treasury('deployer');
 
-        const deployResult = await jetton.send(
+        const deployResult = await sampleJetton.send(
             deployer.getSender(),
             {
                 value: toNano('0.05'),
@@ -28,7 +28,7 @@ describe('Jetton', () => {
 
         expect(deployResult.transactions).toHaveTransaction({
             from: deployer.address,
-            to: jetton.address,
+            to: sampleJetton.address,
             deploy: true,
             success: true,
         });
@@ -36,6 +36,6 @@ describe('Jetton', () => {
 
     it('should deploy', async () => {
         // the check is done inside beforeEach
-        // blockchain and jetton are ready to use
+        // blockchain and sampleJetton are ready to use
     });
 });
